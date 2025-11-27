@@ -3,6 +3,7 @@ let links = [
     { name: 'AWS', url: 'https://gensdeconfiance.awsapps.com/start#/', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/amazonaws.svg' },
     { name: 'admin GDC', url: 'https://admin-prod.gdc-it.app/home', icon: 'https://d202990a3aa0affcefb966567c73305a.cdn.bubble.io/cdn-cgi/image/w=,h=,f=auto,dpr=1,fit=contain/f1700573403959x976856129952687900/Logo%20gdconf.png' },
     { name: 'Amplitude', url: 'https://app.amplitude.com/analytics/gensdeconfiance/home', icon: 'https://cdn.prod.website-files.com/64da81538e9bdebe7ae2fa11/64ee6c441b07b9e11db3dc92_A%20mark%20circle.svg' },
+    { name: 'Bitwarden', url: 'https://vault.bitwarden.com', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/bitwarden.svg' },
     { name: 'Datadog', url: 'https://app.datadoghq.com/', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/datadog.svg' },
     { name: 'Gens de Confiance', url: 'https://gensdeconfiance.com', icon: 'https://play-lh.googleusercontent.com/Ma6i6s5D4TucDWjQi1BA7mX_eem2hAJCAR7C2mJfvDBIt3vCx7Ja6Gr6KcwIcuBIpg=w240-h480-rw', keywords: ['gdc'] },
     { name: 'Gemini', url: 'https://gemini.google.com/', icon: 'https://pnghdpro.com/wp-content/themes/pnghdpro/download/social-media-and-brands/gemini-app-icon.png' },
@@ -19,18 +20,10 @@ let links = [
     { name: 'Notion', url: 'https://www.notion.so/gens-de-confiance/', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/notion.svg' }
 ];
 
-// Sort links alphabetically by name
-function sortLinks() {
-    links.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
-}
-
 const linksGrid = document.getElementById('linksGrid');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 const autocompleteDropdown = document.getElementById('autocompleteDropdown');
-
-// Track currently filtered/visible links
-let currentFilteredLinks = links;
 
 // Autocomplete state
 let autocompleteSuggestions = [];
@@ -39,21 +32,17 @@ let autocompleteTimeout = null;
 
 // Render links
 function renderLinks(linksToRender = links) {
-    // Update current filtered links
-    currentFilteredLinks = linksToRender;
     // Sort before rendering
     const sortedLinks = [...linksToRender].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
     linksGrid.innerHTML = '';
-    sortedLinks.forEach((link, index) => {
-        // Find the actual index in the original links array
-        const actualIndex = links.findIndex(l => l.name === link.name && l.url === link.url);
-        const card = createLinkCard(link, actualIndex);
+    sortedLinks.forEach((link) => {
+        const card = createLinkCard(link);
         linksGrid.appendChild(card);
     });
 }
 
 // Create a link card element
-function createLinkCard(link, index) {
+function createLinkCard(link) {
     const card = document.createElement('div');
     card.className = 'group relative block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1';
     
@@ -98,8 +87,6 @@ function getDomain(url) {
         return url;
     }
 }
-
-// Save links function removed - no longer using localStorage
 
 // Helper function to check if a link matches a search term
 function linkMatchesSearch(link, searchTerm) {
@@ -326,8 +313,7 @@ searchBtn.addEventListener('click', () => {
     performSearch();
 });
 
-// Initialize - sort links first
-sortLinks();
+// Initialize
 renderLinks();
 
 // Focus search input on page load
