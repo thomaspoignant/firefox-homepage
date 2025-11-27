@@ -23,11 +23,6 @@ function sortLinks() {
 }
 
 const linksGrid = document.getElementById('linksGrid');
-const addLinkBtn = document.getElementById('addLinkBtn');
-const addLinkModal = document.getElementById('addLinkModal');
-const closeModal = document.getElementById('closeModal');
-const cancelBtn = document.getElementById('cancelBtn');
-const linkForm = document.getElementById('linkForm');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 
@@ -95,36 +90,6 @@ function getDomain(url) {
 
 // Save links function removed - no longer using localStorage
 
-// Add new link
-function addLink(name, url, icon) {
-    // Ensure URL has protocol
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        url = 'https://' + url;
-    }
-    
-    // If no icon provided, try to get logo from simple-icons or clearbit
-    let iconUrl = icon;
-    if (!iconUrl) {
-        try {
-            const domain = new URL(url).hostname.replace('www.', '');
-            // Try simple-icons first (better quality SVGs), then clearbit as fallback
-            iconUrl = `https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${domain.split('.')[0]}.svg`;
-        } catch {
-            try {
-                const domain = new URL(url).hostname;
-                iconUrl = `https://logo.clearbit.com/${domain}`;
-            } catch {
-                iconUrl = '🔗';
-            }
-        }
-    }
-    
-    links.push({ name, url, icon: iconUrl });
-    sortLinks();
-    renderLinks();
-}
-
-
 // Helper function to check if a link matches a search term
 function linkMatchesSearch(link, searchTerm) {
     const term = searchTerm.toLowerCase();
@@ -190,49 +155,6 @@ searchInput.addEventListener('keypress', (e) => {
 // Handle search button click
 searchBtn.addEventListener('click', () => {
     performSearch();
-});
-
-// Modal handlers
-addLinkBtn.addEventListener('click', () => {
-    addLinkModal.classList.remove('hidden');
-    addLinkModal.classList.add('flex');
-    document.getElementById('linkName').focus();
-});
-
-closeModal.addEventListener('click', () => {
-    addLinkModal.classList.add('hidden');
-    addLinkModal.classList.remove('flex');
-    linkForm.reset();
-});
-
-cancelBtn.addEventListener('click', () => {
-    addLinkModal.classList.add('hidden');
-    addLinkModal.classList.remove('flex');
-    linkForm.reset();
-});
-
-// Close modal when clicking outside
-addLinkModal.addEventListener('click', (e) => {
-    if (e.target === addLinkModal) {
-        addLinkModal.classList.add('hidden');
-        addLinkModal.classList.remove('flex');
-        linkForm.reset();
-    }
-});
-
-// Form submission
-linkForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('linkName').value.trim();
-    const url = document.getElementById('linkUrl').value.trim();
-    const icon = document.getElementById('linkIcon').value.trim();
-    
-    if (name && url) {
-        addLink(name, url, icon);
-        addLinkModal.classList.add('hidden');
-        addLinkModal.classList.remove('flex');
-        linkForm.reset();
-    }
 });
 
 // Initialize - sort links first
