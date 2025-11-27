@@ -2,6 +2,7 @@
 let links = [
     { name: 'AWS', url: 'https://gensdeconfiance.awsapps.com/start#/', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/amazonaws.svg' },
     { name: 'admin GDC', url: 'https://admin-prod.gdc-it.app/home', icon: 'https://d202990a3aa0affcefb966567c73305a.cdn.bubble.io/cdn-cgi/image/w=,h=,f=auto,dpr=1,fit=contain/f1700573403959x976856129952687900/Logo%20gdconf.png' },
+    { name: 'Amplitude', url: 'https://app.amplitude.com/analytics/gensdeconfiance/home', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/amplitude.svg' },
     { name: 'Gens de Confiance', url: 'https://gensdeconfiance.com', icon: 'https://logo.clearbit.com/gensdeconfiance.com', keywords: ['gdc'] },
     { name: 'Gmail', url: 'https://mail.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/gmail_48dp.png' },
     { name: 'Google Docs', url: 'https://docs.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/docs_48dp.png' },
