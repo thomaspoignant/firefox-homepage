@@ -2,6 +2,7 @@
 let links = [
     { name: 'AWS', url: 'https://gensdeconfiance.awsapps.com/start#/', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/amazonaws.svg' },
     { name: 'admin GDC', url: 'https://admin-prod.gdc-it.app/home', icon: 'https://d202990a3aa0affcefb966567c73305a.cdn.bubble.io/cdn-cgi/image/w=,h=,f=auto,dpr=1,fit=contain/f1700573403959x976856129952687900/Logo%20gdconf.png' },
+    { name: 'Gens de Confiance', url: 'https://gensdeconfiance.com', icon: 'https://logo.clearbit.com/gensdeconfiance.com', keywords: ['gdc'] },
     { name: 'Gmail', url: 'https://mail.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/gmail_48dp.png' },
     { name: 'Google Docs', url: 'https://docs.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/docs_48dp.png' },
     { name: 'Google Drive', url: 'https://drive.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/drive_48dp.png' },
@@ -121,12 +122,18 @@ function addLink(name, url, icon) {
 }
 
 
+// Helper function to check if a link matches a search term
+function linkMatchesSearch(link, searchTerm) {
+    const term = searchTerm.toLowerCase();
+    const nameMatch = link.name.toLowerCase().includes(term);
+    const urlMatch = link.url.toLowerCase().includes(term);
+    const keywordsMatch = link.keywords && link.keywords.some(keyword => keyword.toLowerCase().includes(term));
+    return nameMatch || urlMatch || keywordsMatch;
+}
+
 // Search functionality
 function filterLinks(searchTerm) {
-    const filtered = links.filter(link => 
-        link.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        link.url.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filtered = links.filter(link => linkMatchesSearch(link, searchTerm));
     renderLinks(filtered);
 }
 
@@ -145,10 +152,7 @@ function performSearch() {
         const query = searchInput.value.trim();
         if (query) {
             // Re-filter to ensure we have the current filtered state
-            const filtered = links.filter(link => 
-                link.name.toLowerCase().includes(query.toLowerCase()) ||
-                link.url.toLowerCase().includes(query.toLowerCase())
-            );
+            const filtered = links.filter(link => linkMatchesSearch(link, query));
             
             // First check if there's exactly one filtered service visible
             // If there's a search query and exactly one match, open that card
