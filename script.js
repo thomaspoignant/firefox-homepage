@@ -166,3 +166,41 @@ renderLinks();
 if (searchInput) {
     searchInput.focus();
 }
+
+// Daily inspirational quote functionality
+async function fetchDailyQuote() {
+    const quoteElement = document.getElementById('dailyQuote');
+    if (!quoteElement) return;
+    
+    const today = new Date().toDateString();
+    const cachedQuote = localStorage.getItem('dailyQuote');
+    const cachedDate = localStorage.getItem('dailyQuoteDate');
+    
+    // If we have a cached quote for today, use it
+    if (cachedQuote && cachedDate === today) {
+        quoteElement.textContent = cachedQuote;
+        return;
+    }
+    
+    // Otherwise, fetch a new quote
+    try {
+        const response = await fetch('https://api.quotable.io/random?tags=inspirational');
+        if (!response.ok) throw new Error('Failed to fetch quote');
+        
+        const data = await response.json();
+        const quote = `"${data.content}" — ${data.author}`;
+        
+        // Cache the quote and date
+        localStorage.setItem('dailyQuote', quote);
+        localStorage.setItem('dailyQuoteDate', today);
+        
+        quoteElement.textContent = quote;
+    } catch (error) {
+        console.error('Error fetching quote:', error);
+        // Fallback to a default quote if API fails
+        quoteElement.textContent = '"The only way to do great work is to love what you do." — Steve Jobs';
+    }
+}
+
+// Load daily quote when page loads
+fetchDailyQuote();
