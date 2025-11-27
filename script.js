@@ -79,8 +79,11 @@ function createLinkCard(link, index) {
     `;
     
     // Add click handler to open link
-    card.addEventListener('click', () => {
-        window.open(link.url, '_blank');
+    card.addEventListener('click', (e) => {
+        // Prevent any default behavior and ensure same-page navigation
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href = link.url;
     });
     
     return card;
@@ -206,8 +209,15 @@ function displayAutocomplete() {
 
 // Hide autocomplete dropdown
 function hideAutocomplete() {
+    // Clear any pending autocomplete requests
+    if (autocompleteTimeout) {
+        clearTimeout(autocompleteTimeout);
+        autocompleteTimeout = null;
+    }
+    
     if (autocompleteDropdown) {
         autocompleteDropdown.classList.add('hidden');
+        autocompleteDropdown.innerHTML = '';
     }
     autocompleteSuggestions = [];
     selectedAutocompleteIndex = -1;
@@ -249,22 +259,18 @@ function performSearch() {
             // If there's a search query and exactly one match, open that card
             if (filtered.length === 1) {
                 // Open the single matching service card
-                window.open(filtered[0].url, '_blank');
-                searchInput.value = '';
-                renderLinks();
+                window.location.href = filtered[0].url;
                 return;
             }
             
             // Check if it's a URL
             if (query.includes('.') && !query.includes(' ')) {
                 const url = query.startsWith('http') ? query : `https://${query}`;
-                window.open(url, '_blank');
+                window.location.href = url;
             } else {
                 // Search with Google
-                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+                window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
             }
-            searchInput.value = '';
-            renderLinks();
         }
     }
 
