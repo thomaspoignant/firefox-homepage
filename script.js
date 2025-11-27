@@ -5,7 +5,7 @@ let links = [
     { name: 'Amplitude', url: 'https://app.amplitude.com/analytics/gensdeconfiance/home', icon: 'https://cdn.prod.website-files.com/64da81538e9bdebe7ae2fa11/64ee6c441b07b9e11db3dc92_A%20mark%20circle.svg' },
     { name: 'Datadog', url: 'https://app.datadoghq.com/', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/datadog.svg' },
     { name: 'Gens de Confiance', url: 'https://gensdeconfiance.com', icon: 'https://play-lh.googleusercontent.com/Ma6i6s5D4TucDWjQi1BA7mX_eem2hAJCAR7C2mJfvDBIt3vCx7Ja6Gr6KcwIcuBIpg=w240-h480-rw', keywords: ['gdc'] },
-    { name: 'Gemini', url: 'https://gemini.google.com/', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/google.svg' },
+    { name: 'Gemini', url: 'https://gemini.google.com/', icon: 'https://pnghdpro.com/wp-content/themes/pnghdpro/download/social-media-and-brands/gemini-app-icon.png' },
     { name: 'Gmail', url: 'https://mail.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/gmail_48dp.png' },
     { name: 'Google Calendar', url: 'https://calendar.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/calendar_48dp.png' },
     { name: 'Google Docs', url: 'https://docs.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/docs_48dp.png' },
