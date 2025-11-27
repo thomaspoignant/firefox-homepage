@@ -26,8 +26,13 @@ const linkForm = document.getElementById('linkForm');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 
+// Track currently filtered/visible links
+let currentFilteredLinks = links;
+
 // Render links
 function renderLinks(linksToRender = links) {
+    // Update current filtered links
+    currentFilteredLinks = linksToRender;
     // Sort before rendering
     const sortedLinks = [...linksToRender].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
     linksGrid.innerHTML = '';
@@ -138,6 +143,22 @@ searchInput.addEventListener('input', (e) => {
 function performSearch() {
         const query = searchInput.value.trim();
         if (query) {
+            // Re-filter to ensure we have the current filtered state
+            const filtered = links.filter(link => 
+                link.name.toLowerCase().includes(query.toLowerCase()) ||
+                link.url.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            // First check if there's exactly one filtered service visible
+            // If there's a search query and exactly one match, open that card
+            if (filtered.length === 1) {
+                // Open the single matching service card
+                window.open(filtered[0].url, '_blank');
+                searchInput.value = '';
+                renderLinks();
+                return;
+            }
+            
             // Check if it's a URL
             if (query.includes('.') && !query.includes(' ')) {
                 const url = query.startsWith('http') ? query : `https://${query}`;
