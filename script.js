@@ -238,3 +238,8 @@ linkForm.addEventListener('submit', (e) => {
 // Initialize - sort links first
 sortLinks();
 renderLinks();
+
+// Focus search input on page load
+if (searchInput) {
+    searchInput.focus();
+}
