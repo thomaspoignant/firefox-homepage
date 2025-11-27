@@ -26,9 +26,15 @@ function sortLinks() {
 const linksGrid = document.getElementById('linksGrid');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
+const autocompleteDropdown = document.getElementById('autocompleteDropdown');
 
 // Track currently filtered/visible links
 let currentFilteredLinks = links;
+
+// Autocomplete state
+let autocompleteSuggestions = [];
+let selectedAutocompleteIndex = -1;
+let autocompleteTimeout = null;
 
 // Render links
 function renderLinks(linksToRender = links) {
@@ -106,14 +112,86 @@ function filterLinks(searchTerm) {
     renderLinks(filtered);
 }
 
+// Fetch Google autocomplete suggestions
+async function fetchAutocompleteSuggestions(query) {
+    if (!query || query.trim().length < 2) {
+        hideAutocomplete();
+        return;
+    }
+
+    try {
+        // Use Google's autocomplete API via CORS proxy
+        const response = await fetch(`https://suggestqueries.google.com/complete/search?client=firefox&q=${encodeURIComponent(query)}`);
+        if (!response.ok) throw new Error('Failed to fetch suggestions');
+        
+        const data = await response.json();
+        if (data && data[1] && Array.isArray(data[1])) {
+            autocompleteSuggestions = data[1].slice(0, 8); // Limit to 8 suggestions
+            displayAutocomplete();
+        } else {
+            hideAutocomplete();
+        }
+    } catch (error) {
+        console.error('Error fetching autocomplete:', error);
+        hideAutocomplete();
+    }
+}
+
+// Display autocomplete suggestions
+function displayAutocomplete() {
+    if (autocompleteSuggestions.length === 0) {
+        hideAutocomplete();
+        return;
+    }
+
+    autocompleteDropdown.innerHTML = '';
+    autocompleteSuggestions.forEach((suggestion, index) => {
+        const item = document.createElement('div');
+        item.className = `px-4 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 ${
+            index === selectedAutocompleteIndex ? 'bg-gray-100 dark:bg-gray-700' : ''
+        }`;
+        item.textContent = suggestion;
+        item.addEventListener('click', () => {
+            searchInput.value = suggestion;
+            hideAutocomplete();
+            performSearch();
+        });
+        autocompleteDropdown.appendChild(item);
+    });
+
+    autocompleteDropdown.classList.remove('hidden');
+}
+
+// Hide autocomplete dropdown
+function hideAutocomplete() {
+    autocompleteDropdown.classList.add('hidden');
+    autocompleteSuggestions = [];
+    selectedAutocompleteIndex = -1;
+}
+
 // Search input handler
 searchInput.addEventListener('input', (e) => {
     const searchTerm = e.target.value.trim();
+    
+    // Clear existing timeout
+    if (autocompleteTimeout) {
+        clearTimeout(autocompleteTimeout);
+    }
+    
+    // Filter links for local search
     if (searchTerm === '') {
         renderLinks();
+        hideAutocomplete();
     } else {
         filterLinks(searchTerm);
+        
+        // Fetch autocomplete suggestions with debounce
+        autocompleteTimeout = setTimeout(() => {
+            fetchAutocompleteSuggestions(searchTerm);
+        }, 300);
     }
+    
+    selectedAutocompleteIndex = -1;
 });
 
 // Perform search or navigate to URL
@@ -146,10 +224,50 @@ function performSearch() {
         }
     }
 
-// Handle Enter key in search to navigate
-searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        performSearch();
+// Handle keyboard navigation in autocomplete
+searchInput.addEventListener('keydown', (e) => {
+    if (autocompleteSuggestions.length === 0) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+        return;
+    }
+
+    switch (e.key) {
+        case 'ArrowDown':
+            e.preventDefault();
+            selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, autocompleteSuggestions.length - 1);
+            displayAutocomplete();
+            break;
+        case 'ArrowUp':
+            e.preventDefault();
+            selectedAutocompleteIndex = Math.max(selectedAutocompleteIndex - 1, -1);
+            if (selectedAutocompleteIndex === -1) {
+                hideAutocomplete();
+            } else {
+                displayAutocomplete();
+            }
+            break;
+        case 'Enter':
+            e.preventDefault();
+            if (selectedAutocompleteIndex >= 0 && selectedAutocompleteIndex < autocompleteSuggestions.length) {
+                searchInput.value = autocompleteSuggestions[selectedAutocompleteIndex];
+                hideAutocomplete();
+                performSearch();
+            } else {
+                performSearch();
+            }
+            break;
+        case 'Escape':
+            hideAutocomplete();
+            break;
+    }
+});
+
+// Hide autocomplete when clicking outside
+document.addEventListener('click', (e) => {
+    if (!searchInput.contains(e.target) && !autocompleteDropdown.contains(e.target)) {
+        hideAutocomplete();
     }
 });
 
