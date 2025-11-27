@@ -8,6 +8,7 @@ let links = [
     { name: 'Google Meet', url: 'https://meet.google.com/', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTayrTZwfe00-1p6u8ZrDWN7EY4Rsn3BwAOhw&s' },
     { name: 'Google Sheets', url: 'https://sheets.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/sheets_48dp.png' },
     { name: 'Google Slides', url: 'https://slides.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/slides_48dp.png' },
+    { name: 'GitHub', url: 'https://github.com', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/github.svg' },
     { name: 'Linear', url: 'https://linear.app/gensdeconfiance/team/ENG/active', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/linear.svg' },
     { name: 'Notion', url: 'https://www.notion.so/gens-de-confiance/', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/notion.svg' }
 ];
