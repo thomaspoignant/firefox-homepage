@@ -6,6 +6,7 @@ let links = [
     { name: 'Datadog', url: 'https://app.datadoghq.com/', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/datadog.svg' },
     { name: 'Gens de Confiance', url: 'https://gensdeconfiance.com', icon: 'https://play-lh.googleusercontent.com/Ma6i6s5D4TucDWjQi1BA7mX_eem2hAJCAR7C2mJfvDBIt3vCx7Ja6Gr6KcwIcuBIpg=w240-h480-rw', keywords: ['gdc'] },
     { name: 'Gemini', url: 'https://gemini.google.com/', icon: 'https://pnghdpro.com/wp-content/themes/pnghdpro/download/social-media-and-brands/gemini-app-icon.png' },
+    { name: 'GOFF', url: 'https://code.gofeatureflag.org', icon: 'https://github.com/thomaspoignant/go-feature-flag/raw/main/gofeatureflag.svg' },
     { name: 'Gmail', url: 'https://mail.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/gmail_48dp.png' },
     { name: 'Google Calendar', url: 'https://calendar.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/calendar_48dp.png' },
     { name: 'Google Docs', url: 'https://docs.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/docs_48dp.png' },
@@ -112,33 +113,74 @@ function filterLinks(searchTerm) {
     renderLinks(filtered);
 }
 
-// Fetch Google autocomplete suggestions
-async function fetchAutocompleteSuggestions(query) {
+// Fetch Google autocomplete suggestions using JSONP
+function fetchAutocompleteSuggestions(query) {
     if (!query || query.trim().length < 2) {
         hideAutocomplete();
         return;
     }
 
-    try {
-        // Use Google's autocomplete API via CORS proxy
-        const response = await fetch(`https://suggestqueries.google.com/complete/search?client=firefox&q=${encodeURIComponent(query)}`);
-        if (!response.ok) throw new Error('Failed to fetch suggestions');
-        
-        const data = await response.json();
-        if (data && data[1] && Array.isArray(data[1])) {
-            autocompleteSuggestions = data[1].slice(0, 8); // Limit to 8 suggestions
-            displayAutocomplete();
-        } else {
-            hideAutocomplete();
-        }
-    } catch (error) {
-        console.error('Error fetching autocomplete:', error);
-        hideAutocomplete();
+    if (!autocompleteDropdown) {
+        console.error('Autocomplete dropdown not found');
+        return;
     }
+
+    // Remove previous script if exists
+    const existingScript = document.getElementById('googleAutocompleteScript');
+    if (existingScript) {
+        existingScript.remove();
+    }
+
+    // Create unique callback function name
+    const callbackName = 'googleAutocompleteCallback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    // Set up callback function
+    window[callbackName] = function(data) {
+        try {
+            if (data && Array.isArray(data) && data.length > 1 && Array.isArray(data[1])) {
+                autocompleteSuggestions = data[1].slice(0, 8); // Limit to 8 suggestions
+                displayAutocomplete();
+            } else {
+                hideAutocomplete();
+            }
+        } catch (error) {
+            console.error('Error processing autocomplete:', error);
+            hideAutocomplete();
+        } finally {
+            // Clean up callback and script
+            try {
+                delete window[callbackName];
+                const script = document.getElementById('googleAutocompleteScript');
+                if (script) {
+                    script.remove();
+                }
+            } catch (cleanupError) {
+                console.error('Error cleaning up:', cleanupError);
+            }
+        }
+    };
+
+    // Create and inject script tag for JSONP
+    const script = document.createElement('script');
+    script.id = 'googleAutocompleteScript';
+    script.src = `https://suggestqueries.google.com/complete/search?client=firefox&q=${encodeURIComponent(query)}&callback=${callbackName}`;
+    script.onerror = () => {
+        console.error('Failed to load autocomplete suggestions');
+        hideAutocomplete();
+        try {
+            delete window[callbackName];
+        } catch (e) {}
+    };
+    document.head.appendChild(script);
 }
 
 // Display autocomplete suggestions
 function displayAutocomplete() {
+    if (!autocompleteDropdown) {
+        console.error('Autocomplete dropdown element not found');
+        return;
+    }
+    
     if (autocompleteSuggestions.length === 0) {
         hideAutocomplete();
         return;
@@ -147,7 +189,7 @@ function displayAutocomplete() {
     autocompleteDropdown.innerHTML = '';
     autocompleteSuggestions.forEach((suggestion, index) => {
         const item = document.createElement('div');
-        item.className = `px-4 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 ${
+        item.className = `px-4 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white ${
             index === selectedAutocompleteIndex ? 'bg-gray-100 dark:bg-gray-700' : ''
         }`;
         item.textContent = suggestion;
@@ -164,7 +206,9 @@ function displayAutocomplete() {
 
 // Hide autocomplete dropdown
 function hideAutocomplete() {
-    autocompleteDropdown.classList.add('hidden');
+    if (autocompleteDropdown) {
+        autocompleteDropdown.classList.add('hidden');
+    }
     autocompleteSuggestions = [];
     selectedAutocompleteIndex = -1;
 }
