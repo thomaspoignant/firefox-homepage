@@ -1,6 +1,7 @@
 // Default links
 let links = [
     { name: 'admin GDC', url: 'https://admin-prod.gdc-it.app/home', icon: 'https://d202990a3aa0affcefb966567c73305a.cdn.bubble.io/cdn-cgi/image/w=,h=,f=auto,dpr=1,fit=contain/f1700573403959x976856129952687900/Logo%20gdconf.png' },
+    { name: 'GDC IT Panel', url: 'https://gdc-it.cloudflareaccess.com/#/Launcher', icon: 'https://d202990a3aa0affcefb966567c73305a.cdn.bubble.io/cdn-cgi/image/w=,h=,f=auto,dpr=1,fit=contain/f1700573403959x976856129952687900/Logo%20gdconf.png' },
     { name: 'Amplitude', url: 'https://app.amplitude.com/analytics/gensdeconfiance/home', icon: 'https://cdn.prod.website-files.com/64da81538e9bdebe7ae2fa11/64ee6c441b07b9e11db3dc92_A%20mark%20circle.svg' },
     { name: 'AWS', url: 'https://gensdeconfiance.awsapps.com/start#/', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/amazonaws.svg' },
     { name: 'Bitwarden', url: 'https://vault.bitwarden.com', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/bitwarden.svg' },
