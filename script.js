@@ -17,6 +17,7 @@ let links = [
     { name: 'Google Slides', url: 'https://slides.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/slides_48dp.png' },
     { name: 'GitHub', url: 'https://github.com', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/github.svg' },
     { name: 'Linear', url: 'https://linear.app/gensdeconfiance/team/ENG/active', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/linear.svg' },
+    { name: 'Lucca', url: 'https://gensdeconfiance.ilucca.net/', icon: 'https://peoplespheres.com/wp-content/uploads/2023/02/logo-lucca.png' },
     { name: 'Notion', url: 'https://www.notion.so/gens-de-confiance/', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/notion.svg' }
 ];
 
@@ -176,7 +177,8 @@ function displayAutocomplete() {
         return;
     }
 
-    autocompleteDropdown.innerHTML = '';
+    // Use document fragment for faster rendering
+    const fragment = document.createDocumentFragment();
     autocompleteSuggestions.forEach((suggestion, index) => {
         const item = document.createElement('div');
         item.className = `px-4 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white ${
@@ -188,9 +190,11 @@ function displayAutocomplete() {
             hideAutocomplete();
             performSearch();
         });
-        autocompleteDropdown.appendChild(item);
+        fragment.appendChild(item);
     });
 
+    autocompleteDropdown.innerHTML = '';
+    autocompleteDropdown.appendChild(fragment);
     autocompleteDropdown.classList.remove('hidden');
 }
 
@@ -226,10 +230,15 @@ searchInput.addEventListener('input', (e) => {
     } else {
         filterLinks(searchTerm);
         
-        // Fetch autocomplete suggestions with debounce
-        autocompleteTimeout = setTimeout(() => {
-            fetchAutocompleteSuggestions(searchTerm);
-        }, 300);
+        // Don't show autocomplete if search starts with http (user is typing a URL)
+        if (searchTerm.toLowerCase().startsWith('http')) {
+            hideAutocomplete();
+        } else {
+            // Fetch autocomplete suggestions with debounce (reduced delay for faster response)
+            autocompleteTimeout = setTimeout(() => {
+                fetchAutocompleteSuggestions(searchTerm);
+            }, 150);
+        }
     }
     
     selectedAutocompleteIndex = -1;
