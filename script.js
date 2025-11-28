@@ -6,6 +6,7 @@ let links = [
     { name: 'Bitwarden', url: 'https://vault.bitwarden.com', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/bitwarden.svg' },
     { name: 'Datadog', url: 'https://app.datadoghq.com/', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/datadog.svg' },
     { name: 'Gens de Confiance', url: 'https://gensdeconfiance.com', icon: 'https://play-lh.googleusercontent.com/Ma6i6s5D4TucDWjQi1BA7mX_eem2hAJCAR7C2mJfvDBIt3vCx7Ja6Gr6KcwIcuBIpg=w240-h480-rw', keywords: ['gdc'] },
+    { name: 'staging', url: 'https://staging.gensdeconfiance.com/fr', icon: 'https://play-lh.googleusercontent.com/Ma6i6s5D4TucDWjQi1BA7mX_eem2hAJCAR7C2mJfvDBIt3vCx7Ja6Gr6KcwIcuBIpg=w240-h480-rw' },
     { name: 'Gemini', url: 'https://gemini.google.com/', icon: 'https://pnghdpro.com/wp-content/themes/pnghdpro/download/social-media-and-brands/gemini-app-icon.png' },
     { name: 'GOFF', url: 'https://code.gofeatureflag.org', icon: 'https://github.com/thomaspoignant/go-feature-flag/raw/main/gofeatureflag.svg' },
     { name: 'Gmail', url: 'https://mail.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/gmail_48dp.png' },
