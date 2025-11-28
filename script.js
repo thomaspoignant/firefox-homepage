@@ -12,7 +12,7 @@ let links = [
     { name: 'Google Calendar', url: 'https://calendar.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/calendar_48dp.png' },
     { name: 'Google Docs', url: 'https://docs.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/docs_48dp.png' },
     { name: 'Google Drive', url: 'https://drive.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/drive_48dp.png' },
-    { name: 'Google Meet', url: 'https://meet.google.com/', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTayrTZwfe00-1p6u8ZrDWN7EY4Rsn3BwAOhw&s' },
+    { name: 'Google Meet', url: 'https://meet.google.com/', icon: 'https://pnghdpro.com/wp-content/themes/pnghdpro/download/social-media-and-brands/google-meet-app-icon.png' },
     { name: 'Google Sheets', url: 'https://sheets.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/sheets_48dp.png' },
     { name: 'Google Slides', url: 'https://slides.google.com/', icon: 'https://www.gstatic.com/images/branding/product/2x/slides_48dp.png' },
     { name: 'GitHub', url: 'https://github.com', icon: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/github.svg' },
